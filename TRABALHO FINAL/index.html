@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenGo - Frescor da Feira</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Cabeçalho -->
+  <header class="topo">
+    <div class="logo">
+      <img src="logo.png" alt="GreenGo">
+    </div>
+    <nav>
+      <a href="#">Início</a>
+      <a href="#">Frutas</a>
+      <a href="#">Verduras</a>
+      <a href="#">Legumes</a>
+      <a href="#">Ofertas</a>
+      <a href="#" id="btn-conta">Minha Conta</a>
+    </nav>
+    <div class="carrinho">🛒</div>
+  </header>
+
+  <!-- Banner -->
+  <section class="banner">
+    <div class="banner-texto">
+      <h1>Frescor da Feira,<br>na Sua Casa</h1>
+      <button>Começar a comprar Agora</button>
+    </div>
+  </section>
+
+  <!-- Produtos -->
+  <section class="produtos">
+    <h2>OS MAIS PEDIDOS DA SEMANA</h2>
+    <div class="grid">
+      <div class="produto"><img src="img/morangossss.avif"><h3>Morango</h3><p>R$ 10,22/kg</p><button>Adicionar</button></div>
+      <div class="produto"><img src="img/abacaxi.avif"><h3>Abacaxi</h3><p>R$ 5,99/kg</p><button>Adicionar</button></div>
+      <div class="produto"><img src="img/pessego.avif"><h3>Pêssego</h3><p>R$ 5,99/kg</p><button>Adicionar</button></div>
+      <div class="produto"><img src="img/batatas.avif"><h3>Batata</h3><p>R$ 8,22/kg</p><button>Adicionar</button></div>
+      <div class="produto"><img src="img/brocolis.avif"><h3>Brócolis</h3><p>R$ 4,57/kg</p><button>Adicionar</button></div>
+    </div>
+  </section>
+
+
+  <footer>
+    <p>
+      Green Go S/A | Rua Marques de Abrantes, 192, Bloco 1, Loja A.<br>
+      CNPJ nº 00.776.574/1975-10
+    </p>
+  </footer>
+
+  <div id="modal-conta" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+
+      <!-- LOGIN -->
+      <div id="tela-login" class="card">
+        <div class="top-bar">
+          <div class="logo"><img src="logo.png" alt="Logo GreenGo"></div>
+          
+        </div>
+        <h2>Entrar na sua conta</h2>
+
+        <form id="login-form">
+          <input type="email" placeholder="E-mail" id="login-email" required>
+          <div class="senha-container">
+            <input type="password" placeholder="Senha" id="login-senha" required>
+            <input type="checkbox" id="mostrar-login-senha">
+          </div>
+          <button type="submit">Entrar</button>
+        </form>
+
+        <p>Não tem conta? <a href="#" id="link-cadastro">Crie agora</a></p>
+      </div>
+
+      <div id="tela-cadastro" class="card" style="display: none;">
+        <div class="top-bar">
+          <div class="logo"><img src="logo.png" alt="Logo GreenGo"></div>
+        </div>
+        <h2>Crie sua Conta GreenGo</h2>
+
+        <form id="signup-form">
+          <input type="text" placeholder="Nome Completo" id="nome" required>
+          <input type="email" placeholder="E-mail" id="email" required>
+          <div class="senha-container">
+            <input type="password" placeholder="Senha" id="senha" required>
+            <input type="checkbox" id="mostrar-senha">
+          </div>
+          <button type="submit">Cadastrar</button>
+        </form>
+
+        <p>Já tem conta? <a href="#" id="link-login">Acesse aqui</a></p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
