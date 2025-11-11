@@ -5,23 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GreenGo - Frescor da Feira</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body>
 
-  <!-- Cabeçalho -->
-  <header class="topo">
-    <div class="logo">
-      <img src="logo.png" alt="GreenGo">
-    </div>
-    <nav>
-      <a href="#">Início</a>
-      <a href="#">Frutas</a>
-      <a href="#">Verduras</a>
-      <a href="#">Legumes</a>
-      <a href="#">Ofertas</a>
-      <a href="#" id="btn-conta">Minha Conta</a>
-    </nav>
-    <div class="carrinho">🛒</div>
+<!-- Cabeçalho -->
+<header class="topo">
+  <div class="logo">
+    <img src="logo.png" alt="GreenGo">
+  </div>
+
+  <nav class="menu-links">
+    <a href="#">Início</a>
+    <a href="#">Frutas</a>
+    <a href="#">Verduras</a>
+    <a href="#">Legumes</a>
+    <a href="#">Ofertas</a>
+    <a href="#" id="btn-conta">Minha Conta</a>
+  </nav>
+
+ <div class="icons">
+  <i class="fa-solid fa-cart-shopping"></i>
+
+  <div class="search-box">
+    <i class="fa-solid fa-magnifying-glass" id="search-toggle"></i>
+    <input type="text" id="search-bar" placeholder="Pesquisar..." />
+  </div>
+</div>
+
+</header>
+
+</div>
+
   </header>
 
   <!-- Banner -->
@@ -39,12 +55,12 @@
       <div class="produto"><img src="img/morangossss.avif"><h3>Morango</h3><p>R$ 10,22/kg</p><button>Adicionar</button></div>
       <div class="produto"><img src="img/abacaxi.avif"><h3>Abacaxi</h3><p>R$ 5,99/kg</p><button>Adicionar</button></div>
       <div class="produto"><img src="img/pessego.avif"><h3>Pêssego</h3><p>R$ 5,99/kg</p><button>Adicionar</button></div>
-      <div class="produto"><img src="img/batatas.avif"><h3>Batata</h3><p>R$ 8,22/kg</p><button>Adicionar</button></div>
-      <div class="produto"><img src="img/brocolis.avif"><h3>Brócolis</h3><p>R$ 4,57/kg</p><button>Adicionar</button></div>
+      <div class="produto"><img src="img/batatas.jpg"><h3>Batata</h3><p>R$ 8,22/kg</p><button>Adicionar</button></div>
+      <div class="produto"><img src="img/brocolis.jpg"><h3>Brócolis</h3><p>R$ 4,57/kg</p><button>Adicionar</button></div>
     </div>
   </section>
 
-
+<!--Rodapé-->
   <footer>
     <p>
       Green Go S/A | Rua Marques de Abrantes, 192, Bloco 1, Loja A.<br>
@@ -97,7 +113,31 @@
 
     </div>
   </div>
+<!-- ÍCONE DE LIBRAS (VLibras oficial do Governo Federal) -->
+<div vw class="enabled">
+  <div vw-access-button class="active"></div>
+  <div vw-plugin-wrapper>
+    <div class="vw-plugin-top-wrapper"></div>
+  </div>
+</div>
+
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>
+  new window.VLibras.Widget('https://vlibras.gov.br/app');
+</script>
 
   <script src="script.js"></script>
+    <script src="script.js"></script>
+
+ <!-- ÍCONE DE LIBRAS (funcional) -->
+<div class="icone-libras">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Libras_icon.svg" alt="Libras" />
+</div>
+
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+ 
+</body>
+</html>
+
 </body>
 </html>
