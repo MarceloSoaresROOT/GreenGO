@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenGo - Frescor da Feira</title>
+
+  <!-- LINKS EXTERNOS -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- Cabeçalho -->
+<header class="topo">
+  <div class="logo">
+    <img src="img/logo greengou.png" alt="GreenGo">
+  </div>
+
+ 
+  <!-- Menu de navegação -->
+<nav class="menu-links">
+  <a href="#" onclick="mostrarSeção('inicio')">Início</a>
+  <a href="#" onclick="mostrarFrutas()">Frutas</a> <!-- Alterado para chamar o JavaScript -->
+  <a href="#" onclick="mostrarSeção('catalogo-verduras')">Verduras</a>
+  <a href="#" onclick="mostrarSeção('catalogo-legumes')">Legumes</a>
+  <a href="#" onclick="mostrarSeção('ofertas')">Ofertas</a>
+  <a href="#" id="btn-conta">Minha Conta</a>
+</nav>
+
+<!-- Seção Frutas (inicialmente oculta) -->
+<section id="frutas-painel" class="frutas-painel" style="display: none;">
+  <h2>Frutas</h2>
+  <div class="grid-prod-lista">
+    <div class="produto-item">
+      <img src="img/maca.jpg" alt="Maçã Gala">
+      <p>Maçã Gala</p>
+      <span>R$ 5,99</span>
+    </div>
+    <div class="produto-item">
+      <img src="img/pera.jpg" alt="Pera">
+      <p>Pera</p>
+      <span>R$ 8,99</span>
+    </div>
+    <!-- Continue com outros produtos -->
+  </div>
+</section>
+
+
+
+
+  <div class="icons">
+    <i class="fa-solid fa-cart-shopping"></i>
+
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass" id="search-toggle"></i>
+      <input type="text" id="search-bar" placeholder="Pesquisar..." />
+    </div>
+  </div>
+</header>
+
+<!-- Banner -->
+<section id="inicio" class="banner">
+  <div class="banner-texto">
+    <h1>Frescor da Feira,<br>na Sua Casa</h1>
+    <button>Começar a comprar Agora</button>
+  </div>
+</section>
+
+<!-- Produtos -->
+<section id="ofertas" class="produtos">
+  <h2>OS MAIS PEDIDOS DA SEMANA</h2>
+  <div class="grid">
+    <div class="produto"><img src="img/morangossss.avif" alt="morangos frescos"><h3>Morango</h3><p>R$ 10,22/kg</p><button>Adicionar</button></div>
+    <div class="produto"><img src="img/abacaxi.avif"><h3>Abacaxi</h3><p>R$ 5,99/kg</p><button>Adicionar</button></div>
+    <div class="produto"><img src="img/pessego.avif"><h3>Pêssego</h3><p>R$ 5,99/kg</p><button>Adicionar</button></div>
+    <div class="produto"><img src="img/batatas.jpg"><h3>Batata</h3><p>R$ 8,22/kg</p><button>Adicionar</button></div>
+    <div class="produto"><img src="img/brocolis.jpg"><h3>Brócolis</h3><p>R$ 4,57/kg</p><button>Adicionar</button></div>
+  </div>
+</section>
+
+<!-- =================== NOVA SPA DINÂMICA =================== -->
+<section id="spa-catalogo" style="display:none; padding: 2rem;">
+
+  <!-- MENU DE FILTROS -->
+  <aside class="filtros-spa">
+    <h3>FILTROS</h3>
+
+    <button onclick="filtrarSPA('todos')">Todos</button>
+    <button onclick="filtrarSPA('frutas')">Frutas</button>
+    <button onclick="filtrarSPA('verduras')">Verduras</button>
+    <button onclick="filtrarSPA('legumes')">Legumes</button>
+    <button onclick="filtrarSPA('promo')">Promoções</button>
+  </aside>
+
+  <!-- LISTAGEM DE PRODUTOS -->
+  <div id="spa-lista-produtos" class="grid-spa"></div>
+
+</section>
+
+<!-- =================== DETALHE DO PRODUTO SPA =================== -->
+<section id="spa-produto" class="spa-produto" style="display:none; padding: 2rem;">
+
+  <button class="btn-voltar" onclick="voltarSPA()">← Voltar</button>
+
+  <div class="spa-detalhe">
+    <img id="spa-img" src="" alt="Produto">
+
+    <div class="spa-info">
+      <h2 id="spa-nome"></h2>
+      <p id="spa-preco"></p>
+
+      <div class="spa-qtd">
+        <button onclick="mudarQtd(-1)">-</button>
+        <span id="spa-qtd">1</span>
+        <button onclick="mudarQtd(1)">+</button>
+      </div>
+
+      <p class="spa-total">Total: R$ <span id="spa-total">0,00</span></p>
+
+      <button class="btn-add-carrinho" onclick="adicionarCarrinhoSPA()">Adicionar ao Carrinho</button>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ================= CATÁLOGOS ================= -->
+<section id="catalogo-frutas" class="catalogo">
+  <h2>Frutas</h2>
+  <div class="grid-prod-lista">
+
+    <div class="produto-item" onclick="abrirProduto('Maçã Gala', 'R$ 5,99 / Kg', 'img/maca.jpg')">
+      <img src="img/maca.jpg">
+      <p>Maçã Gala</p>
+      <span>R$ 5,99</span>
+    </div>
+
+    <div class="produto-item" onclick="abrirProduto('Pera', 'R$ 8,99 / Kg', 'img/pera.jpg')">
+      <img src="img/pera.jpg">
+      <p>Pera</p>
+      <span>R$ 8,99</span>
+    </div>
+
+  </div>
+</section>
+
+<section id="catalogo-verduras" class="catalogo">
+  <h2>Verduras</h2>
+  <div class="grid-prod-lista">
+
+    <div class="produto-item" onclick="abrirProduto('Alface Crespa', 'R$ 3,99 / Un', 'img/alface.jpg')">
+      <img src="img/alface.jpg">
+      <p>Alface Crespa</p>
+      <span>R$ 3,99</span>
+    </div>
+
+  </div>
+</section>
+
+<section id="catalogo-legumes" class="catalogo">
+  <h2>Legumes</h2>
+  <div class="grid-prod-lista">
+
+    <div class="produto-item" onclick="abrirProduto('Cenoura', 'R$ 4,50 / Kg', 'img/cenoura.jpg')">
+      <img src="img/cenoura.jpg">
+      <p>Cenoura</p>
+      <span>R$ 4,50</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= PÁGINA DO PRODUTO ================= -->
+<section id="pagina-produto" class="pagina-produto" style="display:none;">
+  
+  <button class="btn-voltar" onclick="voltarCatalogo()">← Voltar</button>
+
+  <div class="produto-view">
+    <img id="produto-img">
+
+    <div class="produto-info">
+      <h2 id="produto-nome"></h2>
+      <p id="produto-preco"></p>
+
+      <button class="btn-comprar">Comprar Agora</button>
+    </div>
+  </div>
+  
+
+</section>
+
+<!-- Rodapé -->
+<footer>
+  <p>
+    Green Go S/A | Rua Marques de Abrantes, 192, Bloco 1, Loja A.<br>
+    CNPJ nº 00.776.574/1975-10
+  </p>
+</footer>
+
+<!-- ========== MODAL ========== -->
+<div id="modal-conta" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+
+    <!-- LOGIN -->
+    <div id="tela-login" class="card">
+      <div class="top-bar">
+        <div class="logo"><img src="img/logo greengou.png" alt="Logo GreenGo"></div>
+      </div>
+
+      <h2>Entrar na sua conta</h2>
+
+      <form id="login-form">
+        <input type="email" placeholder="E-mail" id="login-email" required>
+
+        <!-- Campo senha login -->
+        <div class="campo-senha">
+          <input type="password" id="login-senha" placeholder="Senha" required>
+          <i class="fa-solid fa-eye olho" data-input="login-senha"></i>
+        </div>
+
+        <button type="submit">Entrar</button>
+      </form>
+
+      <p>Não tem conta? <a href="#" id="link-cadastro">Crie agora</a></p>
+    </div>
+
+    <!-- CADASTRO -->
+    <div id="tela-cadastro" class="card" style="display: none;">
+      <div class="top-bar">
+        <div class="logo"><img src="img/logo greengou.png" alt="Logo GreenGo"></div>
+      </div>
+
+      <h2>Crie sua Conta GreenGo</h2>
+
+      <form id="signup-form">
+        <input type="text" placeholder="Nome Completo" id="nome" required>
+        <input type="email" placeholder="E-mail" id="email" required>
+
+        <!-- Campo senha cadastro -->
+        <div class="campo-senha">
+          <input type="password" id="cadastro-senha" placeholder="Senha" required>
+          <i class="fa-solid fa-eye olho" data-input="cadastro-senha"></i>
+        </div>
+
+        <button type="submit">Cadastrar</button>
+      </form>
+
+      <p>Já tem conta? <a href="#" id="link-login">Acesse aqui</a></p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ÍCONE DE LIBRAS -->
+<div vw class="enabled">
+  <div vw-access-button class="active"></div>
+  <div vw-plugin-wrapper>
+    <div class="vw-plugin-top-wrapper"></div>
+  </div>
+</div>
+
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
+
+<!-- Adicionando o script para navegação -->
+<script>
+  function mostrarSeção(seçãoId) {
+    // Esconde todas as seções
+    const seções = document.querySelectorAll('.catalogo, .produtos, .banner');
+    seções.forEach(seção => seção.classList.remove('active'));
+
+    // Exibe a seção correspondente
+    const seçãoAtiva = document.getElementById(seçãoId);
+    if (seçãoAtiva) {
+      seçãoAtiva.classList.add('active');
+    }
+  }
+
+ 
+  document.addEventListener('DOMContentLoaded', () => {
+    mostrarSeção('inicio');
+  });
+</script>
+
+<!-- SCRIPT -->
+<script src="script.js"></script>
+
+
+</body>
+</html>
