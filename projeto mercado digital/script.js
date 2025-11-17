@@ -1,37 +1,51 @@
-// ============ ABRIR E FECHAR MODAL ============
+/* ============================================================
+   MODAL LOGIN / CADASTRO
+============================================================ */
 const modal = document.getElementById("modal-conta");
 const btnConta = document.getElementById("btn-conta");
 const closeModal = document.querySelector(".close");
 
-btnConta.onclick = () => modal.style.display = "flex";
-closeModal.onclick = () => modal.style.display = "none";
+// Variável para armazenar usuário logado
+let usuarioLogado = null;
 
-window.onclick = e => {
-  if (e.target === modal) modal.style.display = "none";
+btnConta.onclick = (e) => {
+  e.preventDefault();
+  modal.classList.add("active");
+  modal.style.display = "flex";
 };
 
-// ============ TROCAR ENTRE LOGIN E CADASTRO ============
+closeModal.onclick = () => {
+  modal.classList.remove("active");
+  modal.style.display = "none";
+};
+
+window.onclick = e => { 
+  if (e.target === modal) {
+    modal.classList.remove("active");
+    modal.style.display = "none";
+  }
+};
+
+/* Trocar entre Login e Cadastro */
 const telaLogin = document.getElementById("tela-login");
 const telaCadastro = document.getElementById("tela-cadastro");
-const linkCadastro = document.getElementById("link-cadastro");
-const linkLogin = document.getElementById("link-login");
 
-linkCadastro.onclick = () => {
+document.getElementById("link-cadastro").onclick = (e) => {
+  e.preventDefault();
   telaLogin.style.display = "none";
   telaCadastro.style.display = "block";
 };
 
-linkLogin.onclick = () => {
+document.getElementById("link-login").onclick = (e) => {
+  e.preventDefault();
   telaCadastro.style.display = "none";
   telaLogin.style.display = "block";
 };
 
-// ============ MOSTRAR / ESCONDER SENHAS ============
-document.querySelectorAll(".campo-senha i").forEach(icon => {
+/* Mostrar/Esconder Senha */
+document.querySelectorAll(".campo-senha .olho").forEach(icon => {
   icon.addEventListener("click", () => {
-    const inputId = icon.getAttribute("data-input");
-    const campo = document.getElementById(inputId);
-
+    const campo = document.getElementById(icon.dataset.input);
     if (campo.type === "password") {
       campo.type = "text";
       icon.classList.remove("fa-eye");
@@ -44,186 +58,278 @@ document.querySelectorAll(".campo-senha i").forEach(icon => {
   });
 });
 
-// ============ BARRA DE PESQUISA ============
-const searchBox = document.querySelector(".search-box");
-const searchToggle = document.getElementById("search-toggle");
-
-searchToggle.onclick = () => {
-  searchBox.classList.toggle("active");
+/* Login e Cadastro */
+document.getElementById("login-form").onsubmit = (e) => {
+  e.preventDefault();
+  const email = document.getElementById("login-email").value;
+  const nomeUsuario = email.split('@')[0]; // Usa parte do email como nome
+  usuarioLogado = nomeUsuario;
+  
+  // Atualizar texto do botão de conta
+  btnConta.textContent = `Boas compras, ${nomeUsuario}`;
+  
+  alert("Login realizado com sucesso!");
+  modal.classList.remove("active");
+  modal.style.display = "none";
 };
-// ================= CATALOGO =================
-function mostrarCatalogo(tipo) {
-  document.querySelectorAll(".catalogo").forEach(c => c.classList.remove("active"));
-  document.querySelector(`#catalogo-${tipo}`).classList.add("active");
 
-  // esconde página de produto se estiver aberta
-  document.getElementById("pagina-produto").style.display = "none";
+document.getElementById("signup-form").onsubmit = (e) => {
+  e.preventDefault();
+  const nome = document.getElementById("nome").value;
+  usuarioLogado = nome;
+  
+  // Atualizar texto do botão de conta
+  btnConta.textContent = `Boas compras, ${nome}`;
+  
+  alert("Cadastro realizado com sucesso!");
+  telaCadastro.style.display = "none";
+  telaLogin.style.display = "block";
+};
+
+/* ============================================================
+   FILTRO DE CATEGORIAS COM SCROLL SUAVE
+============================================================ */
+function filtrarProdutos(categoria) {
+  // Não esconder seções, apenas rolar suavemente
+  switch(categoria) {
+    case 'frutas':
+      document.getElementById('catalogo-frutas').scrollIntoView({ behavior: 'smooth' });
+      break;
+    case 'verduras':
+      document.getElementById('catalogo-verduras').scrollIntoView({ behavior: 'smooth' });
+      break;
+    case 'legumes':
+      document.getElementById('catalogo-legumes').scrollIntoView({ behavior: 'smooth' });
+      break;
+    case 'ofertas':
+      document.getElementById('ofertas').scrollIntoView({ behavior: 'smooth' });
+      break;
+  }
 }
 
-// ================= PÁGINA DO PRODUTO =================
+// Mostrar todas as seções inicialmente
+window.addEventListener('load', () => {
+  const secoes = document.querySelectorAll('.catalogo, .produtos');
+  secoes.forEach(secao => {
+    secao.style.display = 'block';
+  });
+});
+
+/* ============================================================
+   BARRA DE PESQUISA
+============================================================ */
+const searchBar = document.getElementById("search-bar");
+searchBar.addEventListener('input', function() {
+  const searchTerm = this.value.toLowerCase();
+  
+  // Pesquisar em todos os produtos
+  const produtos = document.querySelectorAll('.produto-item, .produto');
+  
+  produtos.forEach(produto => {
+    const nome = produto.querySelector('h3, p').textContent.toLowerCase();
+    if (nome.includes(searchTerm)) {
+      produto.style.display = 'block';
+    } else {
+      produto.style.display = 'none';
+    }
+  });
+});
+
+/* ============================================================
+   NAVEGAÇÃO POR ÂNCORAS - CORRIGIDO
+============================================================ */
+document.querySelectorAll('.menu-links a[href^="#"]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    
+    // Ignora o link "Minha Conta"
+    if (href === '#' || this.id === 'btn-conta') {
+      return;
+    }
+    
+    e.preventDefault();
+    const targetId = href.substring(1);
+    const targetSection = document.getElementById(targetId);
+    
+    if (targetSection) {
+      targetSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+
+/* ============================================================
+   PÁGINA DO PRODUTO
+============================================================ */
+let produtoAtual = null;
+
 function abrirProduto(nome, preco, imagem) {
-  document.querySelectorAll(".catalogo").forEach(c => c.style.display = "none");
+  const precoNumerico = parseFloat(preco.replace("R$", "").replace("/", "").replace("Kg", "").replace("Un", "").trim().replace(",", "."));
+  
+  produtoAtual = {
+    nome: nome,
+    preco: precoNumerico,
+    imagem: imagem
+  };
 
   document.getElementById("produto-nome").textContent = nome;
   document.getElementById("produto-preco").textContent = preco;
   document.getElementById("produto-img").src = imagem;
+  document.getElementById("produto-qtd").textContent = "1";
+  document.getElementById("produto-total").textContent = precoNumerico.toFixed(2).replace(".", ",");
 
   document.getElementById("pagina-produto").style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function voltarCatalogo() {
+function fecharProduto() {
   document.getElementById("pagina-produto").style.display = "none";
-
-  const frutas = document.getElementById("catalogo-frutas");
-  frutas.style.display = "block";
+  produtoAtual = null;
 }
-// ========================
-// CARRINHO LATERAL
-// ========================
 
+function alterarQtdProduto(valor) {
+  const qtdElement = document.getElementById("produto-qtd");
+  let qtd = parseInt(qtdElement.textContent);
+  qtd = Math.max(1, qtd + valor);
+  qtdElement.textContent = qtd;
+
+  const total = produtoAtual.preco * qtd;
+  document.getElementById("produto-total").textContent = total.toFixed(2).replace(".", ",");
+}
+
+function adicionarProdutoAoCarrinho() {
+  if (!produtoAtual) return;
+
+  const qtd = parseInt(document.getElementById("produto-qtd").textContent);
+  
+  for (let i = 0; i < qtd; i++) {
+    adicionarAoCarrinho(produtoAtual.nome, produtoAtual.preco.toString(), produtoAtual.imagem);
+  }
+
+  alert(`${qtd}x ${produtoAtual.nome} adicionado(s) ao carrinho!`);
+  fecharProduto();
+}
+
+/* ============================================================
+   CARRINHO LATERAL
+============================================================ */
 let carrinho = [];
 const carrinhoPainel = document.getElementById("carrinho");
 const overlayCarrinho = document.getElementById("overlay-carrinho");
 const itemsCarrinho = document.getElementById("carrinho-itens");
 const totalCarrinho = document.getElementById("carrinho-total");
+const cartCounter = document.getElementById("cart-counter");
 
-// abrir carrinho
-document.querySelector(".fa-cart-shopping").addEventListener("click", () => {
+document.querySelector(".cart-icon").addEventListener("click", () => {
   carrinhoPainel.classList.add("ativo");
   overlayCarrinho.classList.add("ativo");
 });
-
-// fechar carrinho
-document.getElementById("fechar-carrinho").addEventListener("click", fecharCarrinho);
-overlayCarrinho.addEventListener("click", fecharCarrinho);
 
 function fecharCarrinho() {
   carrinhoPainel.classList.remove("ativo");
   overlayCarrinho.classList.remove("ativo");
 }
 
-// adicionar ao carrinho
-function adicionarAoCarrinho(nome, preco, img) {
-  const itemExistente = carrinho.find(item => item.nome === nome);
+document.getElementById("fechar-carrinho").onclick = fecharCarrinho;
+overlayCarrinho.onclick = fecharCarrinho;
 
+function adicionarAoCarrinho(nome, preco, img) {
+  const precoNumerico = parseFloat(preco.replace(",", "."));
+  
+  const itemExistente = carrinho.find(p => p.nome === nome);
+  
   if (itemExistente) {
     itemExistente.qtd++;
   } else {
     carrinho.push({
-      nome,
-      preco: parseFloat(preco.replace("R$", "").replace(",", ".")),
-      img,
+      nome: nome,
+      preco: precoNumerico,
+      img: img,
       qtd: 1
     });
   }
-
+  
   atualizarCarrinho();
+  atualizarContadorCarrinho();
 }
 
-// atualizar carrinho
+function atualizarContadorCarrinho() {
+  const totalItens = carrinho.reduce((total, item) => total + item.qtd, 0);
+  cartCounter.textContent = totalItens;
+  
+  // Mostrar/ocultar contador
+  if (totalItens > 0) {
+    cartCounter.style.display = 'flex';
+  } else {
+    cartCounter.style.display = 'none';
+  }
+}
+
 function atualizarCarrinho() {
   itemsCarrinho.innerHTML = "";
   let total = 0;
 
+  if (carrinho.length === 0) {
+    itemsCarrinho.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Carrinho vazio</p>';
+    totalCarrinho.textContent = "R$ 0,00";
+    return;
+  }
+
   carrinho.forEach((item, index) => {
     total += item.preco * item.qtd;
-
+    
     itemsCarrinho.innerHTML += `
       <div class="item-carrinho">
-        <img src="${item.img}">
-        
+        <img src="${item.img}" alt="${item.nome}">
         <div class="item-info">
           <h4>${item.nome}</h4>
           <p>R$ ${item.preco.toFixed(2).replace(".", ",")}</p>
-
           <div class="qtd">
-            <button onclick="diminuir(${index})">-</button>
+            <button onclick="alterarQuantidade(${index}, 'diminuir')">-</button>
             <span>${item.qtd}</span>
-            <button onclick="aumentar(${index})">+</button>
+            <button onclick="alterarQuantidade(${index}, 'aumentar')">+</button>
           </div>
-
           <span class="remover-item" onclick="removerItem(${index})">Remover</span>
         </div>
-      </div>`;
+      </div>
+    `;
   });
 
   totalCarrinho.textContent = "R$ " + total.toFixed(2).replace(".", ",");
 }
 
-// aumentar quantidade
-function aumentar(i) {
-  carrinho[i].qtd++;
-  atualizarCarrinho();
-}
-
-// diminuir quantidade
-function diminuir(i) {
-  if (carrinho[i].qtd > 1) {
-    carrinho[i].qtd--;
-  } else {
-    carrinho.splice(i, 1);
+function alterarQuantidade(index, tipo) {
+  if (tipo === 'diminuir' && carrinho[index].qtd > 1) {
+    carrinho[index].qtd--;
+  } else if (tipo === 'aumentar') {
+    carrinho[index].qtd++;
   }
   atualizarCarrinho();
+  atualizarContadorCarrinho();
 }
 
-// remover item
-function removerItem(i) {
-  carrinho.splice(i, 1);
+function removerItem(index) {
+  carrinho.splice(index, 1);
   atualizarCarrinho();
+  atualizarContadorCarrinho();
 }
 
-function esconderTudo() {
-  // Seções principais
-  document.querySelector('#inicio').style.display = "none";
-  document.querySelector('#ofertas').style.display = "none";
-
-  // Catálogos
-  document.querySelector('#catalogo-frutas').style.display = "none";
-  document.querySelector('#catalogo-verduras').style.display = "none";
-  document.querySelector('#catalogo-legumes').style.display = "none";
-
-  // Página de produto
-  document.querySelector('#pagina-produto').style.display = "none";
+function finalizarCompra() {
+  if (carrinho.length === 0) {
+    alert("Seu carrinho está vazio!");
+    return;
+  }
+  
+  const total = carrinho.reduce((sum, item) => sum + (item.preco * item.qtd), 0);
+  alert(`Compra finalizada!\nTotal: R$ ${total.toFixed(2).replace(".", ",")}\n\nObrigado por comprar na GreenGo! 🥬🍅`);
+  
+  carrinho = [];
+  atualizarCarrinho();
+  atualizarContadorCarrinho();
+  fecharCarrinho();
 }
 
-// ---- MOSTRAR PÁGINA INICIAL ----
-function mostrarInicio() {
-  esconderTudo();
-  document.querySelector('#inicio').style.display = "block";
-  document.querySelector('#ofertas').style.display = "block";
-}
-
-// ---- MOSTRAR CADA CATÁLOGO ----
-function mostrarFrutas() {
-  esconderTudo();
-  document.querySelector('#catalogo-frutas').style.display = "block";
-}
-
-function mostrarVerduras() {
-  esconderTudo();
-  document.querySelector('#catalogo-verduras').style.display = "block";
-}
-
-function mostrarLegumes() {
-  esconderTudo();
-  document.querySelector('#catalogo-legumes').style.display = "block";
-}
-
-// ---- ABRIR PÁGINA DE PRODUTO ----
-function abrirProduto(nome, preco, imagem) {
-  esconderTudo();
-  document.querySelector('#pagina-produto').style.display = "block";
-
-  document.querySelector('#produto-nome').innerText = nome;
-  document.querySelector('#produto-preco').innerText = preco;
-  document.querySelector('#produto-img').src = imagem;
-}
-
-// ---- VOLTAR PARA ÚLTIMO CATÁLOGO ----
-function voltarCatalogo() {
-  history.back();
-}
-
-// ---- INICIAR NA TELA INICIAL ----
-document.addEventListener("DOMContentLoaded", mostrarInicio);
-
+// Inicializar contador do carrinho
+atualizarContadorCarrinho();

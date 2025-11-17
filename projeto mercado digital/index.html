@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GreenGo - Frescor da Feira</title>
-
-  <!-- LINKS EXTERNOS -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -17,44 +15,24 @@
     <img src="img/logo greengou.png" alt="GreenGo">
   </div>
 
- 
-  <!-- Menu de navegação -->
-<nav class="menu-links">
-  <a href="#" onclick="mostrarSeção('inicio')">Início</a>
-  <a href="#" onclick="mostrarFrutas()">Frutas</a> <!-- Alterado para chamar o JavaScript -->
-  <a href="#" onclick="mostrarSeção('catalogo-verduras')">Verduras</a>
-  <a href="#" onclick="mostrarSeção('catalogo-legumes')">Legumes</a>
-  <a href="#" onclick="mostrarSeção('ofertas')">Ofertas</a>
-  <a href="#" id="btn-conta">Minha Conta</a>
-</nav>
-
-<!-- Seção Frutas (inicialmente oculta) -->
-<section id="frutas-painel" class="frutas-painel" style="display: none;">
-  <h2>Frutas</h2>
-  <div class="grid-prod-lista">
-    <div class="produto-item">
-      <img src="img/maca.jpg" alt="Maçã Gala">
-      <p>Maçã Gala</p>
-      <span>R$ 5,99</span>
-    </div>
-    <div class="produto-item">
-      <img src="img/pera.jpg" alt="Pera">
-      <p>Pera</p>
-      <span>R$ 8,99</span>
-    </div>
-    <!-- Continue com outros produtos -->
-  </div>
-</section>
-
-
-
+  <!-- Menu de navegação CORRIGIDO -->
+  <nav class="menu-links">
+    <a href="#inicio">Início</a>
+    <a href="#" onclick="filtrarProdutos('frutas')">Frutas</a>
+    <a href="#" onclick="filtrarProdutos('verduras')">Verduras</a>
+    <a href="#" onclick="filtrarProdutos('legumes')">Legumes</a>
+    <a href="#" onclick="filtrarProdutos('ofertas')">Ofertas</a>
+    <a href="#" id="btn-conta">Minha Conta</a>
+  </nav>
 
   <div class="icons">
-    <i class="fa-solid fa-cart-shopping"></i>
-
-    <div class="search-box">
-      <i class="fa-solid fa-magnifying-glass" id="search-toggle"></i>
-      <input type="text" id="search-bar" placeholder="Pesquisar..." />
+    <div class="cart-icon">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span class="cart-counter" id="cart-counter">0</span>
+    </div>
+    <div class="search-box active">
+      <input type="text" id="search-bar" placeholder="Pesquisar produtos..." />
+      <i class="fa-solid fa-magnifying-glass"></i>
     </div>
   </div>
 </header>
@@ -63,132 +41,408 @@
 <section id="inicio" class="banner">
   <div class="banner-texto">
     <h1>Frescor da Feira,<br>na Sua Casa</h1>
-    <button>Começar a comprar Agora</button>
+    <button onclick="filtrarProdutos('frutas')">Começar a comprar Agora</button>
   </div>
 </section>
 
-<!-- Produtos -->
-<section id="ofertas" class="produtos">
-  <h2>OS MAIS PEDIDOS DA SEMANA</h2>
-  <div class="grid">
-    <div class="produto"><img src="img/morangossss.avif" alt="morangos frescos"><h3>Morango</h3><p>R$ 10,22/kg</p><button>Adicionar</button></div>
-    <div class="produto"><img src="img/abacaxi.avif"><h3>Abacaxi</h3><p>R$ 5,99/kg</p><button>Adicionar</button></div>
-    <div class="produto"><img src="img/pessego.avif"><h3>Pêssego</h3><p>R$ 5,99/kg</p><button>Adicionar</button></div>
-    <div class="produto"><img src="img/batatas.jpg"><h3>Batata</h3><p>R$ 8,22/kg</p><button>Adicionar</button></div>
-    <div class="produto"><img src="img/brocolis.jpg"><h3>Brócolis</h3><p>R$ 4,57/kg</p><button>Adicionar</button></div>
-  </div>
-</section>
-
-<!-- =================== NOVA SPA DINÂMICA =================== -->
-<section id="spa-catalogo" style="display:none; padding: 2rem;">
-
-  <!-- MENU DE FILTROS -->
-  <aside class="filtros-spa">
-    <h3>FILTROS</h3>
-
-    <button onclick="filtrarSPA('todos')">Todos</button>
-    <button onclick="filtrarSPA('frutas')">Frutas</button>
-    <button onclick="filtrarSPA('verduras')">Verduras</button>
-    <button onclick="filtrarSPA('legumes')">Legumes</button>
-    <button onclick="filtrarSPA('promo')">Promoções</button>
-  </aside>
-
-  <!-- LISTAGEM DE PRODUTOS -->
-  <div id="spa-lista-produtos" class="grid-spa"></div>
-
-</section>
-
-<!-- =================== DETALHE DO PRODUTO SPA =================== -->
-<section id="spa-produto" class="spa-produto" style="display:none; padding: 2rem;">
-
-  <button class="btn-voltar" onclick="voltarSPA()">← Voltar</button>
-
-  <div class="spa-detalhe">
-    <img id="spa-img" src="" alt="Produto">
-
-    <div class="spa-info">
-      <h2 id="spa-nome"></h2>
-      <p id="spa-preco"></p>
-
-      <div class="spa-qtd">
-        <button onclick="mudarQtd(-1)">-</button>
-        <span id="spa-qtd">1</span>
-        <button onclick="mudarQtd(1)">+</button>
+<!-- Mais Comprados da Semana -->
+<section id="mais-comprados" class="produtos">
+  <h2>🔥 MAIS COMPRADOS DESTA SEMANA</h2>
+  <div class="grid" id="mais-comprados-grid">
+    <div class="produto">
+      <img src="/images/Apple.jpg" alt="Maçã Gala">
+      <h3>Maçã Gala</h3>
+      <div class="preco-oferta">
+        <span class="preco-novo">R$ 5,99/kg</span>
+        <span class="comprados-count">+120 vendidos</span>
       </div>
-
-      <p class="spa-total">Total: R$ <span id="spa-total">0,00</span></p>
-
-      <button class="btn-add-carrinho" onclick="adicionarCarrinhoSPA()">Adicionar ao Carrinho</button>
+      <button onclick="adicionarAoCarrinho('Maçã Gala', '5.99', '/images/Apple.jpg')">Adicionar</button>
+    </div>
+    <div class="produto">
+      <img src="/images/Banana.jpg" alt="Banana">
+      <h3>Banana</h3>
+      <div class="preco-oferta">
+        <span class="preco-novo">R$ 4,99/kg</span>
+        <span class="comprados-count">+98 vendidos</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Banana', '4.99', '/images/Banana.jpg')">Adicionar</button>
+    </div>
+    <div class="produto">
+      <img src="img/morangossss.avif" alt="Morango">
+      <h3>Morango</h3>
+      <div class="preco-oferta">
+        <span class="preco-novo">R$ 10,22/kg</span>
+        <span class="comprados-count">+85 vendidos</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Morango', '10.22', 'img/morangossss.avif')">Adicionar</button>
+    </div>
+    <div class="produto">
+      <img src="/images/Carrot.jpg" alt="Cenoura">
+      <h3>Cenoura</h3>
+      <div class="preco-oferta">
+        <span class="preco-novo">R$ 4,50/kg</span>
+        <span class="comprados-count">+76 vendidos</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Cenoura', '4.50', '/images/Carrot.jpg')">Adicionar</button>
     </div>
   </div>
-
 </section>
 
+<!-- Produtos em Oferta -->
+<section id="ofertas" class="produtos">
+  <h2>🔥 OFERTAS ESPECIAIS</h2>
+  <div class="grid" id="ofertas-grid">
+    <div class="produto oferta">
+      <img src="img/morangossss.avif" alt="morangos frescos">
+      <h3>Morango</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 12,99/kg</span>
+        <span class="preco-novo">R$ 10,22/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Morango', '10.22', 'img/morangossss.avif')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="img/abacaxi.avif" alt="abacaxi">
+      <h3>Abacaxi</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 7,50/kg</span>
+        <span class="preco-novo">R$ 5,99/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Abacaxi', '5.99', 'img/abacaxi.avif')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="img/pessego.avif" alt="pêssego">
+      <h3>Pêssego</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 8,50/kg</span>
+        <span class="preco-novo">R$ 5,99/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Pêssego', '5.99', 'img/pessego.avif')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="/images/Potato.jpg" alt="batata">
+      <h3>Batata</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 9,99/kg</span>
+        <span class="preco-novo">R$ 8,22/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Batata', '8.22', '/images/Potato.jpg')">Adicionar</button>
+    </div>
+    <!-- Novas Ofertas de Frutas -->
+    <div class="produto oferta">
+      <img src="/images/Banana.jpg" alt="Banana">
+      <h3>Banana</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 6,50/kg</span>
+        <span class="preco-novo">R$ 4,99/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Banana', '4.99', '/images/Banana.jpg')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="/images/Orange.jpg" alt="Laranja">
+      <h3>Laranja</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 5,50/kg</span>
+        <span class="preco-novo">R$ 3,99/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Laranja', '3.99', '/images/Orange.jpg')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="/images/Grapes.jpg" alt="Uva">
+      <h3>Uva</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 15,99/kg</span>
+        <span class="preco-novo">R$ 12,99/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Uva', '12.99', '/images/Grapes.jpg')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="/images/Mango.jpg" alt="Manga">
+      <h3>Manga</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 8,50/kg</span>
+        <span class="preco-novo">R$ 6,50/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Manga', '6.50', '/images/Mango.jpg')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="/images/Lemon.jpg" alt="Limão">
+      <h3>Limão</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 4,50/kg</span>
+        <span class="preco-novo">R$ 2,99/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Limão', '2.99', '/images/Lemon.jpg')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="/images/Watermelon.jpg" alt="Melancia">
+      <h3>Melancia</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 19,99/un</span>
+        <span class="preco-novo">R$ 15,99/un</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Melancia', '15.99', '/images/Watermelon.jpg')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="/images/Kiwi.jpg" alt="Kiwi">
+      <h3>Kiwi</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 22,99/kg</span>
+        <span class="preco-novo">R$ 18,99/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Kiwi', '18.99', '/images/Kiwi.jpg')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="/images/Pear.jpg" alt="Pera">
+      <h3>Pera</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 10,99/kg</span>
+        <span class="preco-novo">R$ 8,99/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Pera', '8.99', '/images/Pear.jpg')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="/images/Tomato.jpg" alt="Tomate">
+      <h3>Tomate</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 8,50/kg</span>
+        <span class="preco-novo">R$ 6,99/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Tomate', '6.99', '/images/Tomato.jpg')">Adicionar</button>
+    </div>
+    <div class="produto oferta">
+      <img src="/images/Onion.jpg" alt="Cebola">
+      <h3>Cebola</h3>
+      <div class="preco-oferta">
+        <span class="preco-antigo">R$ 5,50/kg</span>
+        <span class="preco-novo">R$ 3,99/kg</span>
+      </div>
+      <button onclick="adicionarAoCarrinho('Cebola', '3.99', '/images/Onion.jpg')">Adicionar</button>
+    </div>
+  </div>
+</section>
 
-<!-- ================= CATÁLOGOS ================= -->
+<!-- Catálogo de Frutas -->
 <section id="catalogo-frutas" class="catalogo">
-  <h2>Frutas</h2>
-  <div class="grid-prod-lista">
-
-    <div class="produto-item" onclick="abrirProduto('Maçã Gala', 'R$ 5,99 / Kg', 'img/maca.jpg')">
-      <img src="img/maca.jpg">
+  <h2>🍎 Frutas Frescas</h2>
+  <div class="grid-prod-lista" id="frutas-grid">
+    <div class="produto-item" onclick="abrirProduto('Maçã Gala', 'R$ 5,99 / Kg', '/images/Apple.jpg')">
+      <img src="/images/Apple.jpg" alt="Maçã Gala">
       <p>Maçã Gala</p>
-      <span>R$ 5,99</span>
+      <span>R$ 5,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Maçã Gala', '5.99', '/images/Apple.jpg')">Adicionar</button>
     </div>
-
-    <div class="produto-item" onclick="abrirProduto('Pera', 'R$ 8,99 / Kg', 'img/pera.jpg')">
-      <img src="img/pera.jpg">
+    <div class="produto-item" onclick="abrirProduto('Pera', 'R$ 8,99 / Kg', '/images/Pear.jpg')">
+      <img src="/images/Pear.jpg" alt="Pera">
       <p>Pera</p>
-      <span>R$ 8,99</span>
+      <span>R$ 8,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Pera', '8.99', '/images/Pear.jpg')">Adicionar</button>
     </div>
-
+    <div class="produto-item" onclick="abrirProduto('Morango', 'R$ 10,22 / Kg', 'img/morangossss.avif')">
+      <img src="img/morangossss.avif" alt="Morango">
+      <p>Morango</p>
+      <span>R$ 10,22/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Morango', '10.22', 'img/morangossss.avif')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Abacaxi', 'R$ 5,99 / Kg', 'img/abacaxi.avif')">
+      <img src="img/abacaxi.avif" alt="Abacaxi">
+      <p>Abacaxi</p>
+      <span>R$ 5,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Abacaxi', '5.99', 'img/abacaxi.avif')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Pêssego', 'R$ 5,99 / Kg', 'img/pessego.avif')">
+      <img src="img/pessego.avif" alt="Pêssego">
+      <p>Pêssego</p>
+      <span>R$ 5,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Pêssego', '5.99', 'img/pessego.avif')">Adicionar</button>
+    </div>
+    <!-- Novas Frutas -->
+    <div class="produto-item" onclick="abrirProduto('Banana', 'R$ 4,99 / Kg', '/images/Banana.jpg')">
+      <img src="/images/Banana.jpg" alt="Banana">
+      <p>Banana</p>
+      <span>R$ 4,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Banana', '4.99', '/images/Banana.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Laranja', 'R$ 3,99 / Kg', '/images/Orange.jpg')">
+      <img src="/images/Orange.jpg" alt="Laranja">
+      <p>Laranja</p>
+      <span>R$ 3,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Laranja', '3.99', '/images/Orange.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Uva', 'R$ 12,99 / Kg', '/images/Grapes.jpg')">
+      <img src="/images/Grapes.jpg" alt="Uva">
+      <p>Uva</p>
+      <span>R$ 12,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Uva', '12.99', '/images/Grapes.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Manga', 'R$ 6,50 / Kg', '/images/Mango.jpg')">
+      <img src="/images/Mango.jpg" alt="Manga">
+      <p>Manga</p>
+      <span>R$ 6,50/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Manga', '6.50', '/images/Mango.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Limão', 'R$ 2,99 / Kg', '/images/Lemon.jpg')">
+      <img src="/images/Lemon.jpg" alt="Limão">
+      <p>Limão</p>
+      <span>R$ 2,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Limão', '2.99', '/images/Lemon.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Melancia', 'R$ 15,99 / Un', '/images/Watermelon.jpg')">
+      <img src="/images/Watermelon.jpg" alt="Melancia">
+      <p>Melancia</p>
+      <span>R$ 15,99/un</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Melancia', '15.99', '/images/Watermelon.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Kiwi', 'R$ 18,99 / Kg', '/images/Kiwi.jpg')">
+      <img src="/images/Kiwi.jpg" alt="Kiwi">
+      <p>Kiwi</p>
+      <span>R$ 18,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Kiwi', '18.99', '/images/Kiwi.jpg')">Adicionar</button>
+    </div>
   </div>
 </section>
 
+<!-- Catálogo de Verduras -->
 <section id="catalogo-verduras" class="catalogo">
-  <h2>Verduras</h2>
-  <div class="grid-prod-lista">
-
-    <div class="produto-item" onclick="abrirProduto('Alface Crespa', 'R$ 3,99 / Un', 'img/alface.jpg')">
-      <img src="img/alface.jpg">
+  <h2>🥬 Verduras Frescas</h2>
+  <div class="grid-prod-lista" id="verduras-grid">
+    <div class="produto-item" onclick="abrirProduto('Alface Crespa', 'R$ 3,99 / Un', '/images/FreshVegetables.jpg')">
+      <img src="/images/FreshVegetables.jpg" alt="Alface Crespa">
       <p>Alface Crespa</p>
-      <span>R$ 3,99</span>
+      <span>R$ 3,99/un</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Alface Crespa', '3.99', '/images/FreshVegetables.jpg')">Adicionar</button>
     </div>
-
+    <div class="produto-item" onclick="abrirProduto('Brócolis', 'R$ 4,57 / Kg', 'img/brocolis.jpg')">
+      <img src="img/brocolis.jpg" alt="Brócolis">
+      <p>Brócolis</p>
+      <span>R$ 4,57/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Brócolis', '4.57', 'img/brocolis.jpg')">Adicionar</button>
+    </div>
+    <!-- Novas Verduras -->
+    <div class="produto-item" onclick="abrirProduto('Couve', 'R$ 2,99 / Maço', '/images/Cabbage.jpg')">
+      <img src="/images/Cabbage.jpg" alt="Couve">
+      <p>Couve</p>
+      <span>R$ 2,99/maço</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Couve', '2.99', '/images/Cabbage.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Espinafre', 'R$ 3,50 / Maço', '/images/Spinach.jpg')">
+      <img src="/images/Spinach.jpg" alt="Espinafre">
+      <p>Espinafre</p>
+      <span>R$ 3,50/maço</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Espinafre', '3.50', '/images/Spinach.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Rúcula', 'R$ 2,50 / Maço', '/images/Arugula.jpg')">
+      <img src="/images/Arugula.jpg" alt="Rúcula">
+      <p>Rúcula</p>
+      <span>R$ 2,50/maço</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Rúcula', '2.50', '/images/Arugula.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Agrião', 'R$ 2,75 / Maço', '/images/Watercress.jpg')">
+      <img src="/images/Watercress.jpg" alt="Agrião">
+      <p>Agrião</p>
+      <span>R$ 2,75/maço</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Agrião', '2.75', '/images/Watercress.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Repolho', 'R$ 5,99 / Un', '/images/photo1763400975.jpg')">
+      <img src="/images/photo1763400975.jpg" alt="Repolho">
+      <p>Repolho</p>
+      <span>R$ 5,99/un</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Repolho', '5.99', '/images/photo1763400975.jpg')">Adicionar</button>
+    </div>
   </div>
 </section>
 
+<!-- Catálogo de Legumes -->
 <section id="catalogo-legumes" class="catalogo">
-  <h2>Legumes</h2>
-  <div class="grid-prod-lista">
-
-    <div class="produto-item" onclick="abrirProduto('Cenoura', 'R$ 4,50 / Kg', 'img/cenoura.jpg')">
-      <img src="img/cenoura.jpg">
+  <h2>🥕 Legumes Frescos</h2>
+  <div class="grid-prod-lista" id="legumes-grid">
+    <div class="produto-item" onclick="abrirProduto('Cenoura', 'R$ 4,50 / Kg', '/images/Carrot.jpg')">
+      <img src="/images/Carrot.jpg" alt="Cenoura">
       <p>Cenoura</p>
-      <span>R$ 4,50</span>
+      <span>R$ 4,50/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Cenoura', '4.50', '/images/Carrot.jpg')">Adicionar</button>
     </div>
-
+    <div class="produto-item" onclick="abrirProduto('Batata', 'R$ 8,22 / Kg', '/images/Potato.jpg')">
+      <img src="/images/Potato.jpg" alt="Batata">
+      <p>Batata</p>
+      <span>R$ 8,22/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Batata', '8.22', '/images/Potato.jpg')">Adicionar</button>
+    </div>
+    <!-- Novos Legumes -->
+    <div class="produto-item" onclick="abrirProduto('Tomate', 'R$ 6,99 / Kg', '/images/Tomato.jpg')">
+      <img src="/images/Tomato.jpg" alt="Tomate">
+      <p>Tomate</p>
+      <span>R$ 6,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Tomate', '6.99', '/images/Tomato.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Cebola', 'R$ 3,99 / Kg', '/images/Onion.jpg')">
+      <img src="/images/Onion.jpg" alt="Cebola">
+      <p>Cebola</p>
+      <span>R$ 3,99/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Cebola', '3.99', '/images/Onion.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Pimentão', 'R$ 7,50 / Kg', '/images/Pimento.jpg')">
+      <img src="/images/Pimento.jpg" alt="Pimentão">
+      <p>Pimentão</p>
+      <span>R$ 7,50/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Pimentão', '7.50', '/images/Pimento.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Abobrinha', 'R$ 5,25 / Kg', '/images/Squash.jpg')">
+      <img src="/images/Squash.jpg" alt="Abobrinha">
+      <p>Abobrinha</p>
+      <span>R$ 5,25/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Abobrinha', '5.25', '/images/Squash.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Berinjela', 'R$ 8,75 / Kg', 'img/berinjela.jpg')">
+      <img src="img/berinjela.jpg" alt="Berinjela">
+      <p>Berinjela</p>
+      <span>R$ 8,75/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Berinjela', '8.75', 'img/berinjela.jpg')">Adicionar</button>
+    </div>
+    <div class="produto-item" onclick="abrirProduto('Pepino', 'R$ 4,25 / Kg', '/images/Cucumber.jpg')">
+      <img src="/images/Cucumber.jpg" alt="Pepino">
+      <p>Pepino</p>
+      <span>R$ 4,25/kg</span>
+      <button onclick="event.stopPropagation(); adicionarAoCarrinho('Pepino', '4.25', '/images/Cucumber.jpg')">Adicionar</button>
+    </div>
   </div>
 </section>
 
-<!-- ================= PÁGINA DO PRODUTO ================= -->
+<!-- Página do Produto -->
 <section id="pagina-produto" class="pagina-produto" style="display:none;">
-  
-  <button class="btn-voltar" onclick="voltarCatalogo()">← Voltar</button>
-
+  <button class="btn-voltar" onclick="fecharProduto()">← Voltar</button>
   <div class="produto-view">
-    <img id="produto-img">
-
+    <img id="produto-img" alt="Produto">
     <div class="produto-info">
       <h2 id="produto-nome"></h2>
       <p id="produto-preco"></p>
-
-      <button class="btn-comprar">Comprar Agora</button>
+      <div class="produto-qtd">
+        <button onclick="alterarQtdProduto(-1)">-</button>
+        <span id="produto-qtd">1</span>
+        <button onclick="alterarQtdProduto(1)">+</button>
+      </div>
+      <p class="produto-total">Total: R$ <span id="produto-total">0,00</span></p>
+      <button class="btn-comprar" onclick="adicionarProdutoAoCarrinho()">Adicionar ao Carrinho</button>
     </div>
   </div>
-  
-
 </section>
+
+<!-- Carrinho Lateral -->
+<div id="overlay-carrinho" class="carrinho-overlay"></div>
+<div id="carrinho" class="carrinho-lateral">
+  <div class="carrinho-header">
+    <h3>Meu Carrinho</h3>
+    <span class="fechar-carrinho" id="fechar-carrinho">&times;</span>
+  </div>
+  <div class="carrinho-itens" id="carrinho-itens">
+    <p style="text-align: center; color: #999; padding: 20px;">Carrinho vazio</p>
+  </div>
+  <div class="carrinho-footer">
+    <div class="total-label">Total:</div>
+    <div class="total-valor" id="carrinho-total">R$ 0,00</div>
+    <button class="btn-finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
+  </div>
+</div>
 
 <!-- Rodapé -->
 <footer>
@@ -198,58 +452,41 @@
   </p>
 </footer>
 
-<!-- ========== MODAL ========== -->
+<!-- Modal Login/Cadastro -->
 <div id="modal-conta" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
-
-    <!-- LOGIN -->
     <div id="tela-login" class="card">
       <div class="top-bar">
         <div class="logo"><img src="img/logo greengou.png" alt="Logo GreenGo"></div>
       </div>
-
       <h2>Entrar na sua conta</h2>
-
       <form id="login-form">
         <input type="email" placeholder="E-mail" id="login-email" required>
-
-        <!-- Campo senha login -->
         <div class="campo-senha">
           <input type="password" id="login-senha" placeholder="Senha" required>
           <i class="fa-solid fa-eye olho" data-input="login-senha"></i>
         </div>
-
         <button type="submit">Entrar</button>
       </form>
-
       <p>Não tem conta? <a href="#" id="link-cadastro">Crie agora</a></p>
     </div>
-
-    <!-- CADASTRO -->
     <div id="tela-cadastro" class="card" style="display: none;">
       <div class="top-bar">
         <div class="logo"><img src="img/logo greengou.png" alt="Logo GreenGo"></div>
       </div>
-
       <h2>Crie sua Conta GreenGo</h2>
-
       <form id="signup-form">
         <input type="text" placeholder="Nome Completo" id="nome" required>
         <input type="email" placeholder="E-mail" id="email" required>
-
-        <!-- Campo senha cadastro -->
         <div class="campo-senha">
           <input type="password" id="cadastro-senha" placeholder="Senha" required>
           <i class="fa-solid fa-eye olho" data-input="cadastro-senha"></i>
         </div>
-
         <button type="submit">Cadastrar</button>
       </form>
-
       <p>Já tem conta? <a href="#" id="link-login">Acesse aqui</a></p>
     </div>
-
   </div>
 </div>
 
@@ -263,30 +500,7 @@
 
 <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
-
-<!-- Adicionando o script para navegação -->
-<script>
-  function mostrarSeção(seçãoId) {
-    // Esconde todas as seções
-    const seções = document.querySelectorAll('.catalogo, .produtos, .banner');
-    seções.forEach(seção => seção.classList.remove('active'));
-
-    // Exibe a seção correspondente
-    const seçãoAtiva = document.getElementById(seçãoId);
-    if (seçãoAtiva) {
-      seçãoAtiva.classList.add('active');
-    }
-  }
-
- 
-  document.addEventListener('DOMContentLoaded', () => {
-    mostrarSeção('inicio');
-  });
-</script>
-
-<!-- SCRIPT -->
 <script src="script.js"></script>
-
 
 </body>
 </html>
